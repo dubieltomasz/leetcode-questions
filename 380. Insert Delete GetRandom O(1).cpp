@@ -1,40 +1,36 @@
 class RandomizedSet {
-private:
-    unordered_set<int> us;
-
 public:
     RandomizedSet() {
-        ios_base::sync_with_stdio(false);
-        cin.tie(nullptr);
-        cout.tie(nullptr);
+        
     }
     
-    bool insert(int val) {
-        if(us.find(val) != us.end()) return false;
-        else
-        {
-            us.insert(val);
-            return true;
-        }
+    bool insert(const int& val) {
+        if(um.find(val) != um.end()) return false;
+
+        v.push_back(val);
+        um[val] = v.size()-1;
+
+        return true;
     }
     
-    bool remove(int val) {
-        if(us.find(val) == us.end()) return false;
-        else
-        {
-            us.erase(val);
-            return true;
-        }
+    bool remove(const int& val) {
+        if(um.find(val) == um.end()) return false;
+
+        int index = um[val];
+        v[index] = v.back();
+        v.pop_back();
+
+        um[v[index]] = index;
+        um.erase(val);
+
+        return true;
     }
     
     int getRandom() {
-        random_device rd;
-        uniform_int_distribution<int> uid(0, us.size()-1);
-
-        auto element = begin(us);
-        
-        advance(element, uid(rd));
-
-        return *element;
+        return v[rand() % v.size()];
     }
+
+private:
+    std::unordered_map<int, int> um;
+    std::vector<int> v;
 };
