@@ -25,14 +25,14 @@ public:
             }
             else
             {
-                answer += y * min(c1count, c2count);
+                answer += y * std::min(c1count, c2count);
 
                 c1count = 0;
                 c2count = 0;
             }
         }
 
-        answer += y * min(c1count, c2count);
+        answer += y * std::min(c1count, c2count);
 
         return answer;
     }
