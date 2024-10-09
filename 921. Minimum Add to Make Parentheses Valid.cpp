@@ -1,21 +1,15 @@
 class Solution {
 public:
-    int minAddToMakeValid(const string& s) {
-        int l = 0, r = 0;
+    int minAddToMakeValid(const std::string& s) {
+        int A = 0, B = 0;
 
         for(const char& c : s)
         {
-            switch(c)
-            {
-                case '(':
-                    ++l;
-                    break;
-                case ')':
-                    l? --l : ++r;
-                    break;
-            }
+            if(c == '(') ++A;
+            else if(A)   --A;
+            else         ++B;
         }
 
-        return l+r;
+        return A + B;
     }
 };
