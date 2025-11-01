@@ -1,16 +1,25 @@
 class Solution {
 public:
     ListNode* modifiedList(const std::vector<int>& nums, ListNode* head) {
-        ListNode newHead(0, head), *tmp = &newHead;
-        std::set<int> s(nums.begin(), nums.end());
+        ListNode *pointer = new ListNode(0, head), *tmp = pointer;
+        bool arr[100000] = {};
 
-        while(tmp->next)
-        {
-            if(s.find(tmp->next->val) != s.end())
-                tmp->next = tmp->next->next;
-            else tmp = tmp->next;
+        for(const int& num : nums) {
+            arr[num - 1] = true;
         }
 
-        return newHead.next;
+        while(tmp->next != nullptr) {
+            if(arr[tmp->next->val - 1]) {
+                tmp->next = tmp->next->next;
+            } else {
+                tmp = tmp->next;
+            }
+        }
+
+        tmp = pointer;
+        pointer = pointer->next;
+        delete tmp;
+
+        return pointer;
     }
 };
