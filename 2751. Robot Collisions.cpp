@@ -1,50 +1,57 @@
 class Solution {
 public:
-    std::vector<int> survivedRobotsHealths(const std::vector<int>& positions, std::vector<int>& healths, const std::string& directions) {
-        std::size_t n = positions.size();
-        std::vector<int> answer, indices(n);
-        std::stack<int> st;
-        int top;
-
-        for(int i = 0; i < n; ++i)
-            indices[i] = i;
+    std::vector<int> survivedRobotsHealths(
+        const std::vector<int>& positions,
+        std::vector<int>& healths,
+        const std::string& directions
+    ) {
+        #define n healths.size()
+        std::vector<int> robots(n);
         
-        std::sort(indices.begin(), indices.end(), [&](int a, int b){ return positions[a] < positions[b]; });
-
-        for(const int& index : indices)
-        {
-            if(directions[index] == 'R') st.push(index);
-            else
-            {
-                while(!st.empty() && healths[index] > 0)
-                {
-                    top = st.top();
-                    st.pop();
-
-                    if(healths[top] > healths[index])
-                    {
-                        --healths[top];
-                        healths[index] = 0;
-
-                        st.push(top);
-                    }
-                    else if(healths[top] < healths[index])
-                    {
-                        healths[top] = 0;
-                        --healths[index];
-                    }
-                    else
-                    {
-                        healths[top] = 0;
-                        healths[index] = 0;
-                    }
-                }
-            }
+        for(int i = 0; i < n; ++i) {
+            robots[i] = i;
         }
 
-        for(const int& health : healths)
-            if(health) answer.push_back(health);
+        std::sort(robots.begin(), robots.end(),
+            [&](const int& a, const int& b) -> bool {
+                return positions[a] < positions[b];
+            }
+        );
 
-        return answer;
+        std::stack<int> st;
+
+        for(int robot : robots) {
+            switch(directions[robot]) {
+                case 'L':
+                    while(!st.empty() && healths[robot] != 0) {
+                        if(healths[st.top()] == healths[robot]) {
+                            healths[st.top()] = 0;
+                            st.pop();
+                            healths[robot] = 0;
+                        } else if(healths[st.top()] > healths[robot]) {
+                            --healths[st.top()];
+                            healths[robot] = 0;
+                        } else {
+                            healths[st.top()] = 0;
+                            st.pop();
+                            --healths[robot];
+                        }
+                    }
+                    break;
+                case 'R':
+                    st.push(robot);
+                    break;
+            }
+        }
+        
+        int i = 0;
+        for(int j = 0; j < n; ++j) {
+            if(healths[j] != 0) {
+                robots[i++] = healths[j];
+            }
+        }
+        robots.resize(i);
+
+        return robots;
     }
 };
