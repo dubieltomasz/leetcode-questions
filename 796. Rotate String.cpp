@@ -1,18 +1,29 @@
 class Solution {
 public:
-    bool rotateString(std::string& s, const std::string& goal) {
-        int i = 0;
+    bool rotateString(const std::string& s, const std::string& goal) {
+        if(s.size() != goal.size()) {
+            return false;
+        }
 
-        while(i < s.size())
-        {
-            if(s == goal) break;
+        int i = 0, j = 0;
+        while(i < s.size()) {
+            while(i < s.size() && s[i] != goal[j]) {
+                ++i;
+            }
 
-            s.push_back(s.front());
-            s.erase(s.begin());
+            for(int tmp = i; j < goal.size() && s[tmp % s.size()] == goal[j]; ++tmp) {
+                ++j;
+            }
+
+            if(j == goal.size()) {
+                return true;
+            } else {
+                j = 0;
+            }
 
             ++i;
         }
 
-        return i != s.size();
+        return false;
     }
 };
