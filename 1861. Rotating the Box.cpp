@@ -1,41 +1,33 @@
 class Solution {
 public:
-    std::vector<std::vector<char>> rotateTheBox(const std::vector<std::vector<char>>& box) {
-        int n = box.size(), m = box[0].size(), countStones = 0, k;
-        std::vector<std::vector<char>> answer(m, std::vector<char>(n, '.'));
-
-        for(int i = 0; i < n; ++i)
-        {
-            for(int j = 0; j < m; ++j)
-            {
-                if(box[i][j] == '#')
-                {
-                    ++countStones;
-                }
-                else if(box[i][j] == '*')
-                {
-                    answer[j][n-i-1] = '*';
-                    k = 1;
-
-                    while(countStones)
-                    {
-                        answer[j-k][n-i-1] = '#';
-                        --countStones;
-                        ++k;
-                    }
+    std::vector<std::vector<char>> rotateTheBox(const std::vector<std::vector<char>>& boxGrid) {
+        std::vector<std::vector<char>> result(boxGrid[0].size(), std::vector<char>(boxGrid.size(), '.'));
+        int stones = 0;
+        
+        for(size_t i = 0; i < boxGrid.size(); ++i) {
+            for(size_t j = 0; j < boxGrid[0].size(); ++j) {
+                switch(boxGrid[i][j]) {
+                    case '#':
+                        ++stones;
+                        break;
+                    case '*':
+                        int tmp = j;
+                        result[tmp][boxGrid.size() - 1 - i] = '*';
+                        while(stones) {
+                            result[--tmp][boxGrid.size() - 1 - i] = '#';
+                            --stones;
+                        }
+                        break;
                 }
             }
 
-            k = 1;
-
-            while(countStones)
-            {
-                answer[m-k][n-i-1] = '#';
-                --countStones;
-                ++k;
+            int tmp = boxGrid[0].size();
+            while(stones) {
+                result[--tmp][boxGrid.size() - 1 - i] = '#';
+                --stones;
             }
         }
 
-        return answer;
+        return result;
     }
 };
