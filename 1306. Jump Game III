@@ -1,0 +1,41 @@
+class Solution {
+public:
+    bool canReach(std::vector<int>& arr, const int start) {
+        if(arr[start] == 0) {
+            return true;
+        }
+
+        std::queue<int> q;
+        q.push(start);
+
+        while(!q.empty()) {
+            int index = q.front();
+            q.pop();
+
+            if(arr[index] == -1) {
+                continue;
+            }
+
+            int val = arr[index];
+            arr[index] = -1;
+
+            if(index - val >= 0) {
+                if(arr[index - val] == 0) {
+                    return true;
+                } else if(arr[index - val] != -1) {
+                    q.push(index - val);
+                }
+            }
+
+            if(index + val < arr.size()) {
+                if(arr[index + val] == 0) {
+                    return true;
+                } else if(arr[index + val] != -1) {
+                    q.push(index + val);
+                }
+            }
+        }
+
+        return false;
+    }
+};
